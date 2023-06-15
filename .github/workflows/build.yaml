@@ -63,7 +63,7 @@ jobs:
         with:
           body: Automatic pre-release of ${{ env.GitVersion_SemVer }} for ${{ env.GitVersion_ShortSha }}
           name: v${{ env.GitVersion_SemVer }}
-          files: ./bin/Release/net6.0/VRisingServerApiPlugin.dll
+          files: ./bin/Release/net6.0/VRisingServerEvents.dll
           fail_on_unmatched_files: true
           generate_release_notes: true
           prerelease: true
