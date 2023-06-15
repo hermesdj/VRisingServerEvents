@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>VRisingServerEvents</AssemblyName>
+    <Description>VRising Server mod used as a Framework to capture server events</Description>
+    <Version>0.1.5</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>VRisingServerEvents</RootNamespace>
+    <AssemblyVersion>0.1.5.0</AssemblyVersion>
+    <FileVersion>0.1.5.0</FileVersion>
+    <InformationalVersion>0.1.5+1.Branch.main.Sha.cbce36d1363d39e8a48d41a30e6e7b8dd7b06017</InformationalVersion>
+    
+    <Authors>jays</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <BepInExPluginGuid>jays.VRisingServerEvents</BepInExPluginGuid>
+
+    <GamePath>C:\Users\Jérémy\Documents\GitHub\v-rising-server\server\bin</GamePath>
+    <PluginsPath>$(GamePath)\BepInEx\plugins</PluginsPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.Core" Version="6.0.0-pre.1" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
+    <PackageReference Include="VRising.Unhollowed.Client" Version="0.6.5.*" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Events\Outgoing\" />
+  </ItemGroup>
+
+  <Target Name="CopyDLLsToTargetServer" AfterTargets="Build">
+    <Message Text="Copying plugin dlls to dev server" Importance="High" />
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb" DestinationFolder="$(PluginsPath)" />
+    <Message Text="Successfuly copied plugin dlls" Importance="High" />
+  </Target>
+</Project>
