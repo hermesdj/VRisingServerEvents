@@ -25,9 +25,9 @@
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
     <PackageReference Include="VRising.Unhollowed.Client" Version="0.6.5.*" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Folder Include="Events\Outgoing\" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <Target Name="CopyDLLsToTargetServer" AfterTargets="Build">
