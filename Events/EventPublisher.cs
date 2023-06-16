@@ -20,6 +20,9 @@ public static class EventPublisher
 
     public static void HandleIncomingEvent(Type eventFactoryType, BaseIncomingEventArgs args)
     {
+        var container = (IEventFactory?)Activator.CreateInstance(eventFactoryType);
+        if (container == null) return;
+
         if (!IncomingEventHandlers.TryGetValue(eventFactoryType, out var handlers))
         {
             EventsPlugin.Logger?.LogDebug($"No incoming event handlers found for type {eventFactoryType.ToString()}");
@@ -30,14 +33,17 @@ public static class EventPublisher
 
         foreach (var handler in handlers)
         {
-            handler.Invoke(null, args);
+            handler.Invoke(container, args);
         }
 
-        HandlePatternedEvent(eventFactoryType, args);
+        HandlePatternedEvent(eventFactoryType, args, container);
     }
 
     public static void HandleOutgoingEvent(Type eventFactoryType, BaseEventArgs args)
     {
+        var container = (IEventFactory?)Activator.CreateInstance(eventFactoryType);
+        if (container == null) return;
+
         if (!OutgoingEventHandlers.TryGetValue(eventFactoryType, out var handlers))
         {
             EventsPlugin.Logger?.LogDebug($"No outgoing event handlers found for type {eventFactoryType.ToString()}");
@@ -46,14 +52,17 @@ public static class EventPublisher
 
         foreach (var handler in handlers)
         {
-            handler.Invoke(null, args);
+            handler.Invoke(container, args);
         }
 
-        HandlePatternedEvent(eventFactoryType, args);
+        HandlePatternedEvent(eventFactoryType, args, container);
     }
 
     public static void HandleInternalEvent(Type eventFactoryType, BaseInternalEventArgs args)
     {
+        var container = (IEventFactory?)Activator.CreateInstance(eventFactoryType);
+        if (container == null) return;
+
         if (!InternalEventHandlers.TryGetValue(eventFactoryType, out var handlers))
         {
             EventsPlugin.Logger?.LogDebug($"No internal event handlers found for type {eventFactoryType.ToString()}");
@@ -62,15 +71,14 @@ public static class EventPublisher
 
         foreach (var handler in handlers)
         {
-            handler.Invoke(null, args);
+            handler.Invoke(container, args);
         }
 
-        HandlePatternedEvent(eventFactoryType, args);
+        HandlePatternedEvent(eventFactoryType, args, container);
     }
 
-    private static void HandlePatternedEvent(Type eventFactoryType, BaseEventArgs args)
+    private static void HandlePatternedEvent(Type eventFactoryType, BaseEventArgs args, IEventFactory? container)
     {
-        var container = (IEventFactory?)Activator.CreateInstance(eventFactoryType);
         if (container == null) return;
 
         var matches =
@@ -80,7 +88,7 @@ public static class EventPublisher
 
         foreach (var handler in matches.SelectMany(handlers => handlers))
         {
-            handler.Invoke(null, args);
+            handler.Invoke(container, args);
         }
     }
 
